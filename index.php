@@ -6,8 +6,9 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 require_once ("pdo.php");
+date_default_timezone_set('Europe/Paris');
 
-$resultat = $dbPDO->prepare("   SELECT titre, libellé, nom, prénom, `date de sortie` AS date, film.id
+$resultat = $dbPDO->prepare("   SELECT titre, libellé, nom, prénom, `date de sortie` AS date, film.id, realisateur.id AS filmmaker
                                 FROM film
                                 INNER JOIN genre ON genre = genre.id
                                 INNER JOIN realisateur ON réalisateur = realisateur.id");
@@ -18,7 +19,7 @@ echo '<h1 style="font-family: Jersey">Liste des meilleurs films des années 2010
 
 foreach ($top_films as $film) {
     $release_date = DateTime::createFromFormat("Y-m-d", $film->date);
-    echo '<li><a href="/Partial2-DevWeb/film.php/?id=' . $film->id . '">' . $film->titre . '</a> (' . $film->libellé . ' de <a href="https://allocine.fr/rechercher/person/?q=' . $film->prénom . ' ' . $film->nom . '">' . $film->prénom . ' ' . $film->nom . "</a>, " . $release_date->format("Y") . ')</li>';
+    echo '<li><a href="/Partial2-DevWeb/film.php/?id=' . $film->id . '">' . $film->titre . '</a> (' . $film->libellé . ' de <a href="/Partial2-DevWeb/filmmaker.php/?id=' . $film->filmmaker . '">' . $film->prénom . ' ' . $film->nom . "</a>, " . $release_date->format("Y") . ')</li>';
 }
 
 echo '</ul>';

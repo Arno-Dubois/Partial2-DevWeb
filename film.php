@@ -11,7 +11,7 @@ if (isset($_GET["id"])) {
     $month = ["janvier", "fevrier", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "decembre"];
 
     $resultat = $dbPDO->prepare("   SELECT titre, `date de sortie` AS `date`, durée, libellé, prénom, nom, `description`, realisateur.id AS filmmakerId FROM `film` INNER JOIN genre ON genre = genre.id INNER JOIN realisateur ON réalisateur = realisateur.id WHERE film.id = :id");
-    $req = $resultat->execute([
+    $resultat->execute([
         "id" => $_GET["id"]
     ]) or die(print_r($resultat->errorInfo()));
 
