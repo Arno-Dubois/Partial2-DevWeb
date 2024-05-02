@@ -1,14 +1,4 @@
-<style>
-    @font-face {
-        font-family: Jersey;
-        src: url('Jersey15-Regular.TTF');
-    }
-
-    @font-face {
-        font-family: Raleway;
-        src: url('Raleway-Regular.TTF');
-    }
-</style>
+<link rel="stylesheet" href="style.css">
 
 <?php
 ini_set('display_errors', 1);
@@ -17,7 +7,7 @@ error_reporting(E_ALL);
 
 require_once ("pdo.php");
 
-$resultat = $dbPDO->prepare("   SELECT titre, genre.libellé, nom, prénom, `date de sortie` AS date
+$resultat = $dbPDO->prepare("   SELECT titre, libellé, nom, prénom, `date de sortie` AS date, film.id
                                 FROM film
                                 INNER JOIN genre ON genre = genre.id
                                 INNER JOIN realisateur ON réalisateur = realisateur.id");
@@ -27,8 +17,8 @@ $top_films = $resultat->fetchAll(PDO::FETCH_CLASS);
 echo '<h1 style="font-family: Jersey">Liste des meilleurs films des années 2010</h1><ul style="font-family: Raleway">';
 
 foreach ($top_films as $film) {
-    $release_year = DateTime::createFromFormat("Y-m-d", $film->date);
-    echo '<li><a href="https://allocine.fr/rechercher/?q=' . $film->titre . '">' . $film->titre . '</a> (' . $film->libellé . ' de <a href="https://allocine.fr/rechercher/person/?q=' . $film->prénom . ' ' . $film->nom . '">' . $film->prénom . ' ' . $film->nom . "</a>, " . $release_year->format("Y") . ')</li>';
+    $release_date = DateTime::createFromFormat("Y-m-d", $film->date);
+    echo '<li><a href="/Partial2-DevWeb/film.php/?id=' . $film->id . '">' . $film->titre . '</a> (' . $film->libellé . ' de <a href="https://allocine.fr/rechercher/person/?q=' . $film->prénom . ' ' . $film->nom . '">' . $film->prénom . ' ' . $film->nom . "</a>, " . $release_date->format("Y") . ')</li>';
 }
 
 echo '</ul>';
